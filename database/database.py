@@ -1,31 +1,41 @@
 # PROBANDO LO BASICO DE LA BD DEL GESTOR DE TORNEOS
 import sqlite3
 
-conexion = sqlite3.connect("tournament.db")
+def conexionDB():
+    conexion = sqlite3.connect("tournament.db")
+    return conexion
 
-cursor = conexion.cursor()
+def createTable():
+    conexionToDB = conexionDB()
+    cursor = conexionToDB.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS grupos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        nombreGrupo TEXT NOT NULL,
+        victoriasGrupo INTEGER,
+        derrotasGrupo INTEGER
+        )
+    """)
+    
+    conexionToDB.commit()
+    conexionToDB.close()
 
-cursor.execute("""
-CREATE TABLE IF NOT EXISTS grupos (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombreGrupo TEXT NOT NULL,
-    victoriasGrupo INTEGER,
-    derrotasGrupo INTEGER
-    )
-""")
+def insertNewGroup(nombre):
 
-cursor.execute("INSERT INTO grupos (nombreGrupo, victoriasGrupo, derrotasGrupo ) VALUES ('Titanes', 0, 0)")
+    conexionToDB = conexionDB()
+    cursor = conexionToDB.cursor()
 
-conexion.commit()
+    cursor.execute("INSERT INTO grupos (nombreGrupo, victoriasGrupo, derrotasGrupo) VALUES (?, 0, 0)",(nombre))
+    
+    conexionToDB.commit()
+    conexionToDB.close()
+    
+def insertOldGroup(nombre,victorias,derrotas):
 
-cursor.execute("SELECT * FROM grupos")
+    conexionToDB = conexionDB()
+    cursor = conexionToDB.cursor()
 
-gruposQuary = cursor.fetchall()
+    cursor.execute("INSERT INTO grupos(nombreGrupo, victoriasGrupo, derrotasGrupo) VALUES (?, ?, ?)",(nombre,victorias,derrotas))
 
-print("Grupos y Estadisticas")
-for grupo in gruposQuary:
-    print(f"ID: {grupo[0]}, Grupo: {grupo[1]}, Victorias: {grupo[2]}, Derrotas: {grupo[3]}")
-
-# Cerrar el cursor y la conexión
-cursor.close()
-conexion.close()
+    conexionToDB.commit()
+    conexionToDB.close()
