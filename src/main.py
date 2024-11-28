@@ -25,7 +25,7 @@ def main():
         print(grupo)
 
 if __name__ == "__main__":
-    main()  
+    main()
 
 
 
