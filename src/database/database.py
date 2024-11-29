@@ -25,7 +25,7 @@ def insertNewGroup(nombre):
     conexionToDB = conexionDB()
     cursor = conexionToDB.cursor()
 
-    cursor.execute("INSERT INTO grupos (nombreGrupo, victoriasGrupo, derrotasGrupo) VALUES (?, 0, 0)",(nombre))
+    cursor.execute("INSERT INTO grupos (nombreGrupo, victoriasGrupo, derrotasGrupo) VALUES (?, 0, 0)",(nombre,))
     
     conexionToDB.commit()
     conexionToDB.close()
